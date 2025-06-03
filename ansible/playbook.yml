@@ -1,0 +1,20 @@
+- name: Setup Docker and deploy app
+  hosts: web
+  become: true
+  tasks:
+    - name: Install required packages
+      apt:
+        name: ['docker.io', 'docker-compose']
+        state: present
+        update_cache: true
+          
+    - name: Clone the Git repo
+      git:
+        repo: https://github.com/suchithrachandrasekaran/multicontainer-todo-app.git
+        dest: /opt/todo-app
+          
+    - name: Start the application\
+      command: docker-compose up -d
+      args:
+        chdir: /opt/todo-app
+
